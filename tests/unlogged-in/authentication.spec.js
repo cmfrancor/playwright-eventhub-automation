@@ -1,8 +1,8 @@
 // @ts-check
 import { test } from '@playwright/test';
-import {randomEmail} from '../helpers/randomHelper'
-import { RegisterPage } from '../pages/RegisterPage';
-import { HomePage} from '../pages/HomePage';
+import {randomEmail} from '../../helpers/randomHelper'
+import { RegisterPage } from '../../pages/RegisterPage';
+import { HomePage} from '../../pages/HomePage';
 
 const userEmail = randomEmail();
 /** @type {RegisterPage} */
@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('https://eventhub.rahulshettyacademy.com/register');
 })
 
-test('Register successfully', async ({ page }) => {
+test.only('Register successfully', async ({ page }) => {
   await registerPage.register(userEmail);
 
   // Verify user is redirected to the homepage
