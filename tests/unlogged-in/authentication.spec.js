@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('https://eventhub.rahulshettyacademy.com/register');
 })
 
-test.only('Register successfully', async ({ page }) => {
+test('Register successfully', async ({ page }) => {
   await registerPage.register(userEmail);
 
   // Verify user is redirected to the homepage
