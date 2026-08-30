@@ -13,6 +13,7 @@ export class HomePage {
 
 
     async isHomePageVisible(email) {
+        await expect(this.page).toHaveURL('https://eventhub.rahulshettyacademy.com/')
         await expect(this.eventHubLogo).toBeVisible();
         await expect(this.userEmailLabel).toHaveText(email)
     }
