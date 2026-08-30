@@ -13,6 +13,10 @@ let eventPage;
 
 let eventName = '';
 let eventPrice = '';
+let bookingRef = '';
+const customerEmail = process.env.EVENTHUB_EMAIL;
+const customerName = process.env.CUSTOMER_NAME;
+const customerPhoneNumber = process.env.CUSTOMER_PHONE_NUMBER;
 
 test.beforeEach(async ({ page }) => {
   registerPage = new RegisterPage(page);
@@ -26,4 +30,6 @@ test('Purchase Event', async ({ page }) => {
     eventName = result.name;
     eventPrice = result.price;
     await eventPage.isEventPageVisible(eventName, eventPrice);
+    await eventPage.purchaseEvent(customerName,customerEmail,customerPhoneNumber);
+    bookingRef = await eventPage.isPurchaseConfirmed(customerName, eventPrice);
 });
