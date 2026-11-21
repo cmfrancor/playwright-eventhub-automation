@@ -58,6 +58,13 @@ layering — protect it.
   (price math), is the anti-pattern — split by real page, or extract a shared component
   (`HeaderComponent`) that each page object composes instead of copying its selectors.
 
+## Comments
+
+Comment only the **compromises and exceptions** a reader might "fix" by mistake: a locator that isn't the
+ideal one (e.g. a CSS class with a TODO to ask dev for a `data-testid`), a structural hop like
+`.locator('..')`, or a legitimate `.nth()` where position is what's under test. Don't narrate obvious
+locators — the per-locator justification lives in the teaching Artifact, not in the code.
+
 ## Naming
 
 - Page object class: `PascalCase` + `Page`/`Component` (`EventPage`, `HeaderComponent`).

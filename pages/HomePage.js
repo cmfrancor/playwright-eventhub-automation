@@ -23,9 +23,10 @@ export class HomePage {
         const numberOfEvents = await this.eventsList.count();
         const randomEventNumber = randomNumber(0, numberOfEvents - 1);
         // .nth() y .locator() son síncronos: devuelven Locators, no necesitan await
+        // .nth() is legitimate here: picking a random card by position is the point.
         const selectedCard = this.eventsList.nth(randomEventNumber);
-        const selectedCardName = selectedCard.locator('h3');
-        const selectedCardPrice = selectedCard.locator('p');
+        const selectedCardName = selectedCard.getByRole('heading');
+        const selectedCardPrice = selectedCard.getByText(/^\s*\$\s?\d/);
 
         // .innerText() es asíncrono: aquí SÍ va el await. Leemos ANTES de hacer click
         const name = await selectedCardName.innerText();
