@@ -8,3 +8,5 @@ node_modules/
 /playwright/.auth/
 .env
 package-lock.json
+# Playwright MCP scratch output
+.playwright-mcp/

@@ -31,6 +31,32 @@ output — not just accept it. This is a first-class deliverable, not an afterth
 8. **Open questions / limitations** — e.g. "no seed API on EventHub, so data is UI-created"; anything we'd
    ask a developer for (a missing `data-testid`).
 
+## Readable without opening the code
+
+The reader must understand every decision **from the Artifact alone**:
+- **Show the real HTML** each locator targets (a trimmed snippet from the live DOM), marking the **anchor**
+  (what we find first) and the **target** (what we assert).
+- **Explain non-obvious syntax in plain words** the first time it appears: `.locator('..')` = "go up to the
+  parent element" (it is not an ellipsis), `{ exact: true }`, regexes, scoping chains.
+- **Define every name** you use as shorthand (e.g. `confirmation` = the confirmation block, and its real
+  property name in the code).
+- For chained locators, give a **step-by-step** reading ("find the label → go up to its row → assert the value").
+- Avoid wide tables that hide columns behind horizontal scroll; prefer one card per locator.
+
+## Traceable to the code
+
+Every explanation must lead the reader to the exact code it describes:
+- **Start with a change map**: file → method/property → line range, each a link.
+- **Link every change** with a `file:line · method` chip pointing to a GitHub **permalink pinned to the PR
+  commit SHA** (`/blob/<sha>/path#L10-L12`), so line numbers don't drift when the branch moves.
+- **Snippets use the real names from the code** (`this.eventConfirmationTicketsNumber`), never invented
+  shorthands like `ticketsRow`. If a shorthand helps, define it and give the real name next to it.
+- **Label every "before"**: is it what was on `main`, or an intermediate draft the reviewer caught? Say which.
+- Close the change map with a link to the PR's "Files changed" tab.
+- **The "what to verify" checklist follows the same rule**: each item names its checklist group in words
+  (not `§1`), spells out the anti-pattern code with its meaning ("Alto5 · locators tied to layout/position"),
+  and links to the exact lines where the reviewer can check it. Persist the checkbox state per viewer.
+
 ## Style
 - Short paragraphs, one idea per line. Tables for locator decisions and the checklist.
 - Show the actual locator strings and say, in words, what would break the rejected ones.
