@@ -1,0 +1,41 @@
+# Teaching Artifact — the explainer we publish with each automation
+
+Every time we create or meaningfully change automated tests, we also publish a **teaching Artifact**: a
+plain-language page that explains *what we did and why*, so the QA grows the senior judgment to review AI
+output — not just accept it. This is a first-class deliverable, not an afterthought.
+
+> Build it as an HTML Artifact (see the `artifact-design` skill first). Private by default. Keep a stable
+> title per feature (e.g. "EventHub automation — Purchase flow") and redeploy the same file to update it.
+
+## Audience & tone
+- Written for **a QA who is learning automation** — simple language, no unexplained jargon. When a term is
+  unavoidable (locator, fixture, auto-wait), define it in one line the first time.
+- Explain the **why**, not just the what. The reader should finish able to *review* similar code.
+
+## Required sections
+
+1. **What we automated** — the flow/scenario in one short paragraph, user-story style.
+2. **What each part of the code does** — walk the test and the page object in reading order, a sentence or
+   two per block (setup/fixtures → the `When` action → the assertions). Link to `file:line`.
+3. **Locator decisions** *(the part the user asked for explicitly)* — a small table: for each non-trivial
+   locator, **what we picked**, **what we rejected**, and **why ours is the most robust** here. Reference
+   `locator-strategy.md`. This is where the reader learns to spot a fragile locator.
+4. **Why it's senior** — map the choices to the patterns: reuse (what we reused instead of duplicating),
+   isolation, web-first waiting, session via `storageState`, API-first data. Name the anti-pattern each
+   choice avoids (ties to `review-checklist.md`).
+5. **What we reused vs created** — explicit: reused `randomHelper.randomEmail`, extended `EventPage`, etc.
+   If we created something new, why we couldn't reuse.
+6. **How to run it** — the exact commands (`--grep @Smoke`, the project, `--ui` to watch).
+7. **What to verify yourself (QA checklist)** — the relevant rows of `review-checklist.md` as checkboxes, so
+   the reader practices the verification on this very example.
+8. **Open questions / limitations** — e.g. "no seed API on EventHub, so data is UI-created"; anything we'd
+   ask a developer for (a missing `data-testid`).
+
+## Style
+- Short paragraphs, one idea per line. Tables for locator decisions and the checklist.
+- Show the actual locator strings and say, in words, what would break the rejected ones.
+- Theme-aware, self-contained (the `artifact-design` and Artifact rules).
+
+## Definition of done
+The Artifact is part of "done" for an automation: the code passes the `review-checklist`, and this explainer
+ships alongside it so the QA can learn *and* verify.
