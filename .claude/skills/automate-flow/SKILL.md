@@ -28,9 +28,9 @@ to read this skill + the docs and produce the test + any page-object/fixture cha
 **Keep the agent's id** — revisions go back to the same author via SendMessage.
 
 **If the flow needs a new or extended page object**, do that part by following the **`/scaffold-page`**
-procedure (discover locators against the running app, expose the page object as a fixture) instead of
-reinventing it here — then continue with the test. (Skills reference each other as procedures; there's no
-automatic skill-to-skill call.)
+procedure instead of reinventing it here, then continue with the test — it owns how page objects are built
+(locators, fixtures) per the docs. (Skills reference each other as procedures; there's no automatic
+skill-to-skill call.)
 
 Requirements for the draft — the rules live in the docs; follow them, don't copy them here:
 - POM & fixtures → `automation-conventions.md`
