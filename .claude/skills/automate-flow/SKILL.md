@@ -27,12 +27,13 @@ to read this skill + the docs and produce the test + any page-object/fixture cha
 `locator-strategy.md` and `test-isolation-and-data.md`, then self-check against `review-checklist.md`.
 **Keep the agent's id** — revisions go back to the same author via SendMessage.
 
-Requirements for the draft:
-- Page object delivered as a **fixture**; `page` received once in the constructor.
-- Locators scoped, role/testid-based, **each justified**.
-- Web-first assertions; no fixed sleeps; `waitForResponse` set up before the action.
-- Unique data via `helpers/randomHelper.js`; session via `storageState`.
-- Business assertions in the test; tags in the title for `--grep`.
+Requirements for the draft (the rules live in the docs — follow them, don't restate them):
+- POM + fixtures → `automation-conventions.md` (`page` once in the constructor; page object **preferably**
+  delivered as a fixture; business assertions in the test).
+- Locators → `locator-strategy.md` (scoped, role/testid, **each justified**).
+- Waiting, isolation, session, data → `test-isolation-and-data.md` (web-first assertions, no fixed sleeps,
+  `waitForResponse` before the action, unique data via `helpers/randomHelper.js`, session via `storageState`).
+- Tags in the title for `--grep`; the reviewer checks everything against `review-checklist.md`.
 
 ### 3. Adversarial review (delegated to `automation-reviewer`)
 Spawn `automation-reviewer` with the diff + the checklist as rubric. Hand every blocker/should-fix back to

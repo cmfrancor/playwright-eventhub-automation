@@ -1,9 +1,9 @@
 # Review Checklist — what the QA verifies in AI output
 
 This is the heart of the system. It's what **you (the human) check** before approving any automation, and
-what the `automation-reviewer` agent runs adversarially first. Each item maps to a named anti-pattern from
-the Playwright guide ("Errores vs. senior": Alto/Medio/Bajo) so you learn the senior pattern, not just a
-pass/fail.
+what the `automation-reviewer` agent runs adversarially first. Each item maps to a named anti-pattern code
+(Alto/Medio/Bajo) defined in `.claude/docs/anti-pattern-glossary.md`, so you learn the senior pattern, not
+just a pass/fail.
 
 How to use it: for every generated/changed test or page object, go group by group. An item is ✅ only if
 you can point at the line that satisfies it. Anything ❌ goes back to the author before merge.
@@ -53,6 +53,8 @@ you can point at the line that satisfies it. Anything ❌ goes back to the autho
 - [ ] **No `test.only` / `describe.only` / `page.pause()`** left behind (a hook blocks these; CI
       `forbidOnly` would fail anyway).
 - [ ] Trace config is `on-first-retry` (not `'on'`) for CI cost.
+- [ ] No global `slowMo` left on for CI in `playwright.config.js` (it's a fixed per-action delay — debug
+      only; relates to Alto3).
 - [ ] Spec file ends cleanly (newline), imports used, no dead code.
 
 ## 7. Tags & execution

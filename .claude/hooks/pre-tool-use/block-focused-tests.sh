@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # PreToolUse hook: refuse to write test.only / describe.only / page.pause into a
 # spec or page-object file. These are dev-only leftovers that break CI (forbidOnly)
-# or halt an unattended run (guide anti-pattern "Bajo13"). Covers Write/Edit/MultiEdit.
-# Degrades gracefully (exit 0) if python3 is unavailable.
+# or halt an unattended run (anti-pattern Bajo13). Covers Write/Edit/MultiEdit.
 set -u
-command -v python3 >/dev/null 2>&1 || exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "[hook] block-focused-tests: python3 not found — focused-test guardrail is OFF." >&2
+  exit 0
+fi
 payload=$(cat 2>/dev/null || true)
 [ -z "$payload" ] && exit 0
 
@@ -16,7 +18,7 @@ except Exception:
     sys.exit(0)
 ti = p.get("tool_input", {}) or {}
 path = ti.get("file_path", "") or ""
-if not re.search(r"/(tests|pages)/", path) or not path.endswith((".js", ".ts", ".mjs", ".cjs")):
+if not re.search(r"/(tests|pages|api|helpers)/", path) or not path.endswith((".js", ".ts", ".mjs", ".cjs")):
     sys.exit(0)
 
 parts = []

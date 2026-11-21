@@ -29,13 +29,15 @@ tests as to grow the QA's eye for *what to verify in AI output*.
    **before** you see the result.
 4. **Every PR passes the merge gate** (`/open-pr`): one or more adversarial review rounds polish the diff
    to PASS, then a human checkpoint. A reviewer PASS is necessary but not sufficient — **your approval is
-   the merge condition.** (Reused from the qa-agentico publish checkpoint.)
-4. **Teach every change.** Created/changed automation ships a plain-language **teaching Artifact**
-   (`.claude/docs/teaching-artifact.md`): what each part does and *why this locator is the best choice*.
-5. **Guardrails are hooks, not vibes** (`.claude/hooks/`): no `test.only`/`page.pause`, no fixed
-   `waitForTimeout`, fragile-locator warnings — enforced mechanically on Write/Edit.
-6. **Locators express intent, not DOM position** (`locator-strategy.md`). Tests are **independent**, data
-   is **unique and API-seeded where possible**, session comes from **storageState** (`test-isolation-and-data.md`).
+   the merge condition.**
+5. **Teach every change.** Created/changed automation ships a teaching Artifact built per
+   `.claude/docs/teaching-artifact.md`: what each part does and *why this locator is the best choice*.
+6. **Guardrails are hooks, not vibes** (`.claude/hooks/`): no `test.only`/`page.pause`, no fixed
+   `waitForTimeout`, fragile-locator warnings — enforced mechanically on Write/Edit (and they print a notice
+   if `python3` is missing, so you know when enforcement is off).
+7. **The docs are the single source of truth.** The actual rules (locators, isolation, waiting, data, POM)
+   live in `.claude/docs/` and are **referenced, not restated**, by agents and skills — so a rule changes in
+   one place, never five.
 
 ## Source of truth (docs — do not re-encode rules elsewhere)
 
@@ -55,12 +57,16 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 - Layers: `pages/` (EventPage, HomePage, LoginPage, RegisterPage), `tests/` (`logged-in/`, `unlogged-in/`),
   `helpers/randomHelper.js` (`randomEmail`, `randomNumber`), `tests/auth.setup.js` (builds `storageState`).
 - `playwright.config.js`: `setup` project + `storageState: playwright/.auth/user.json`; reporter `html`;
-  trace `on-first-retry`. `.env`, `playwright/.auth/`, reports are gitignored.
+  trace `on-first-retry`; **`slowMo: 500`** — a global per-action delay, debug-only; it contradicts the
+  no-fixed-waits ethos and must be 0/removed for CI. `.env`, `playwright/.auth/`, reports are gitignored.
 - **Known anti-patterns to fix in the first PR** (found in the audit): fragile locators in
-  `pages/EventPage.js` (`getByText('$').nth(1)`, `locator('div h1')`); page objects `new`-ed in
-  `beforeEach` instead of delivered as fixtures; customer data from env only (no API seed); business
-  assertions living inside the page object. The first improvement PR fixes these, explaining for each the
-  anti-pattern and the senior pattern.
+  `pages/EventPage.js` — **including but not limited to** `getByText('$').nth(1)`, `locator('div h1')`,
+  `locator('span.booking-ref')`, the `span:has-text(...) + span` sibling selectors, and bare
+  `getByText('View My Bookings')` used as a selector (`/harden-locators` greps the file, it doesn't trust a
+  fixed list); page objects `new`-ed in `beforeEach` instead of delivered as fixtures; customer data from
+  env only (no API seed — though EventHub *does* expose a Swagger API, see `test-isolation-and-data.md`);
+  the config's global `slowMo: 500`; business assertions living inside the page object. The first
+  improvement PR fixes these, explaining for each the anti-pattern and the senior pattern.
 
 ## Structure
 

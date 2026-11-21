@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# PreToolUse hook: refuse a fixed sleep (waitForTimeout with a numeric literal) in a
-# spec or page-object file. Fixed sleeps are a bet on a number — slow when the app is
-# fast, still flaky when it's slow (guide anti-pattern "Alto3"). Covers Write/Edit/MultiEdit.
-# Degrades gracefully (exit 0) if python3 is unavailable.
+# PreToolUse hook: refuse a fixed sleep in a spec or page-object file — either
+# waitForTimeout with a numeric literal, or a hand-rolled new Promise(r => setTimeout(r, N)).
+# Fixed sleeps are a bet on a number (anti-pattern Alto3). Covers Write/Edit/MultiEdit.
 set -u
-command -v python3 >/dev/null 2>&1 || exit 0
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "[hook] block-fixed-sleeps: python3 not found — fixed-sleep guardrail is OFF." >&2
+  exit 0
+fi
 payload=$(cat 2>/dev/null || true)
 [ -z "$payload" ] && exit 0
 
@@ -16,7 +18,7 @@ except Exception:
     sys.exit(0)
 ti = p.get("tool_input", {}) or {}
 path = ti.get("file_path", "") or ""
-if not re.search(r"/(tests|pages)/", path) or not path.endswith((".js", ".ts", ".mjs", ".cjs")):
+if not re.search(r"/(tests|pages|api|helpers)/", path) or not path.endswith((".js", ".ts", ".mjs", ".cjs")):
     sys.exit(0)
 
 parts = []
@@ -27,11 +29,18 @@ for e in (ti.get("edits") or []):
         parts.append(e["new_string"])
 blob = "\n".join(parts)
 
-# numeric literal only: waitForTimeout(3000). A computed/var timeout is not matched.
+hits = []
 if re.search(r"waitForTimeout\s*\(\s*\d", blob):
+    hits.append("waitForTimeout(<number>)")
+# hand-rolled sleep: new Promise(...) wrapping setTimeout
+if re.search(r"new\s+Promise\s*\([^;]*setTimeout", blob, re.S) or \
+   re.search(r"setTimeout\s*\(\s*\w+\s*,\s*\d", blob):
+    hits.append("new Promise(r => setTimeout(r, <number>)) style sleep")
+
+if hits:
     sys.stderr.write(
         "Refusing to write a fixed sleep into " + path + "\n"
-        "Found: waitForTimeout(<number>)\n\n"
+        "Found: " + "; ".join(hits) + "\n\n"
         "Anti-pattern (Alto3): a hard sleep wastes time when the app is fast and still fails when\n"
         "it is slow. It does not fix flakiness, it hides it.\n"
         "Senior pattern: wait for an observable condition instead —\n"

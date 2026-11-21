@@ -25,8 +25,10 @@ that survives UI refactors and expresses **intent**, not DOM position. Every loc
   many elements, make the locator specific (scope it to a card, add the role + name), don't index into the
   list. Indexing is allowed only when the *position itself is the thing under test* (e.g. "the first result"),
   and then it's commented as such.
-  - Repo example to fix: `page.getByText('$').nth(1)` and `page.locator('div h1')` in `pages/EventPage.js` —
-    position-based, will break on any layout change. Replace with a card-scoped role/testid locator.
+  - Repo examples to fix (`pages/EventPage.js`, **not exhaustive — grep the file**): `getByText('$').nth(1)`,
+    `locator('div h1')`, `locator('span.booking-ref')`, `span:has-text(...) + span`, and bare
+    `getByText('View My Bookings')` used as a selector — all position/style-based, will break on any layout
+    change. Replace with card-scoped role/testid locators.
 - **No XPath** unless there is genuinely no other hook — and then leave a comment explaining why and a TODO
   to ask dev for a `data-testid`.
 - **Scope, don't globalize.** Find the container first (`getByTestId('event-card')`), then the element

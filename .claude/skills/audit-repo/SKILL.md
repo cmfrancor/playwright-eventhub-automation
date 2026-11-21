@@ -20,9 +20,11 @@ exist and how session/data are handled today.
 
 ### 2. Run the checklist across the code
 Go through every group of `.claude/docs/review-checklist.md` against the real files. Grep for the usual
-anti-patterns: `\.nth\(`, `\.first\(`, `waitForTimeout`, `test\.only`, `page\.pause`, XPath (`//`),
-`locator\('[^']*\s`), manual read-then-compare assertions, page objects `new`-ed in `beforeEach`, UI login
-inside tests, duplicated selectors/methods across page objects.
+anti-patterns: `\.nth\(`/`\.first\(`/`\.last\(` (**not** a finding where position is the thing under test
+and it's commented — `locator-strategy.md`), `waitForTimeout` and `new Promise(... setTimeout ...)`,
+`test\.only`/`page\.pause`, XPath (`//`), CSS class/sibling selectors, bare `getByText(...)` as a selector,
+manual read-then-compare assertions, `slowMo` in `playwright.config.js`, page objects `new`-ed in
+`beforeEach`, UI login inside tests, duplicated selectors/methods across page objects.
 
 ### 3. Classify each finding
 `blocker` / `should-fix` / `nit`. For each: **anti-pattern → senior pattern → `file:line`**, in plain

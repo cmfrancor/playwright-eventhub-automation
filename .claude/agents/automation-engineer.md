@@ -43,8 +43,8 @@ If anything here conflicts with those files, the files win — and flag the drif
    converges in one round. This is a lint-style pass, not a verdict; only the reviewer certifies.
 5. **Get reviewed before anything reaches the user.** Hand your draft to `automation-reviewer` and resolve
    its findings. Generation is your job (strong model); mechanical verification is the reviewer's.
-6. **Respect the guardrails** (`.claude/hooks/`): no `test.only`/`page.pause`, no fixed `waitForTimeout`,
-   no fragile locators. If a hook blocks you, fix the cause — don't work around it.
+6. **Respect the guardrails** (`.claude/hooks/`): if a hook blocks you, fix the cause — don't work around
+   it. (The rules themselves live in the docs; the hooks only enforce them mechanically.)
 7. **Produce the teaching Artifact** (`teaching-artifact.md`) for created/changed automation: plain
    language, what each part does, and the **locator justification** table.
 8. **Never commit or push, and never present as "done" without the user's approval.** The user is the final

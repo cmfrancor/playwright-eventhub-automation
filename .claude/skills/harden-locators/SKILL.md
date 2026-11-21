@@ -18,9 +18,11 @@ Check whether a stable locator for the same element already exists in another pa
 pattern, keep one definition.
 
 ### 1. Find the offenders
-Grep: `\.nth\(`, `\.first\(`, `\.last\(`, XPath (`//`), bare `getByText('$')`, `locator('div h1')`, CSS
-class chains. List each with `file:line` and why it's fragile. (Known EventHub cases:
-`pages/EventPage.js` → `getByText('$').nth(1)`, `locator('div h1')`.)
+Grep the target file(s) — don't work from a fixed list: `\.nth\(`, `\.first\(`, `\.last\(` (skip the
+commented position-under-test cases, `locator-strategy.md`), XPath (`//`), bare `getByText('$')`,
+`locator('div h1')`, CSS class/sibling selectors (`span.booking-ref`, `span:has-text(...) + span`),
+`getByText(...)` used as a selector. List each with `file:line` and why it's fragile. (EventHub's
+`pages/EventPage.js` has several — grep it, there are more than the two usually cited.)
 
 ### 2. Discover the firm replacement
 Against the running app (codegen / MCP / Inspector), find the role/testid/scoped locator. Confirm it

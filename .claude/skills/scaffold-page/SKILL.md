@@ -22,11 +22,10 @@ Use `codegen` / Playwright MCP (`browser_navigate` + `browser_snapshot`) / Inspe
 role/testid/label. Scope to containers.
 
 ### 2. Draft (delegated to `automation-engineer`)
-- `page` received **once in the constructor**; locators as readable, business-named properties.
-- Actions named by intent; "page reached usable state" query (`is…Visible`) allowed; business assertions
-  stay in tests.
-- Each non-trivial locator **justified** (what picked / rejected / why).
-- Prefer exposing the page object as a **fixture** (add/extend `tests/fixtures/`).
+Follow `automation-conventions.md` (POM: `page` once in the constructor, business-named actions, assertions
+in the test, page object **preferably** delivered as a fixture via `tests/fixtures/`) and
+`locator-strategy.md` (firm, scoped locators, **each justified** — what picked / rejected / why). Don't
+restate the rules here — the docs own them.
 
 ### 3. Review → user checkpoint
 `automation-reviewer` runs the checklist (reuse + locators + POM groups) → fixes by the same author → PASS →

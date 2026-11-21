@@ -8,7 +8,6 @@ tools:
   - Read
   - Glob
   - Grep
-  - Bash
 model: sonnet
 ---
 
@@ -27,7 +26,8 @@ Run `.claude/docs/review-checklist.md` group by group. The supporting detail is 
 2. **Walk every checklist group** (Locators, Waiting, Isolation & data, Session, POM, Hygiene, Tags). For
    each item, point at the line that satisfies or violates it.
 3. **Be concrete.** Every finding is: **anti-pattern → senior pattern → `file:line`**. No vague "could be
-   better". If you can name the guide anti-pattern (Alto/Medio/Bajo), do.
+   better". Name the glossary code (Alto/Medio/Bajo — see `.claude/docs/anti-pattern-glossary.md`) when one
+   applies.
 4. **Severity**: `blocker` (ships a flaky/fragile/dependent test, duplicated code, secret in git, `.only`
    left behind) / `should-fix` / `nit`.
 5. **No false positives.** `.nth()` where position is the thing under test (and commented) is fine;

@@ -1,18 +1,16 @@
 ---
 name: open-pr
 description: |
-  Prepare a branch for merge the qa-agentico way: an adversarial review round that polishes the diff
-  against the review-checklist until PASS, a pre-merge hygiene gate, then a HUMAN approval checkpoint —
-  nothing merges without your go-ahead. Fire on "open a PR", "prepare the PR", "ready to merge",
-  "review before merging".
+  Prepare a branch for merge: an adversarial review round that polishes the diff against the
+  review-checklist until PASS, a pre-merge hygiene gate, then a HUMAN approval checkpoint — nothing merges
+  without your go-ahead. Fire on "open a PR", "prepare the PR", "ready to merge", "review before merging".
 args: "[optional: base branch, default main]"
 ---
 
 # /open-pr — the merge gate
 
 The last gate before anything lands. The author never self-certifies; a separate adversarial reviewer
-polishes the diff, and **you** make the final call to merge. Mirrors the qa-agentico publish checkpoint,
-applied to git PRs.
+polishes the diff, and **you** make the final call to merge.
 
 ## Steps
 
