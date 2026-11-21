@@ -31,6 +31,18 @@ output — not just accept it. This is a first-class deliverable, not an afterth
 8. **Open questions / limitations** — e.g. "no seed API on EventHub, so data is UI-created"; anything we'd
    ask a developer for (a missing `data-testid`).
 
+## Readable without opening the code
+
+The reader must understand every decision **from the Artifact alone**:
+- **Show the real HTML** each locator targets (a trimmed snippet from the live DOM), marking the **anchor**
+  (what we find first) and the **target** (what we assert).
+- **Explain non-obvious syntax in plain words** the first time it appears: `.locator('..')` = "go up to the
+  parent element" (it is not an ellipsis), `{ exact: true }`, regexes, scoping chains.
+- **Define every name** you use as shorthand (e.g. `confirmation` = the confirmation block, and its real
+  property name in the code).
+- For chained locators, give a **step-by-step** reading ("find the label → go up to its row → assert the value").
+- Avoid wide tables that hide columns behind horizontal scroll; prefer one card per locator.
+
 ## Style
 - Short paragraphs, one idea per line. Tables for locator decisions and the checklist.
 - Show the actual locator strings and say, in words, what would break the rejected ones.
