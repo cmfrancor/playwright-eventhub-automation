@@ -6,8 +6,8 @@ export class EventPage {
         this.page = page;
         this.eventPageBreadCrumb = page.getByRole('main').getByRole('link', { name: 'Events' })
         this.eventNameTitle = page.getByRole('heading', { level: 1 });
-        // No testids on this page: anchor on the label and hop to its row ('..'). Breaks if label/value stop
-        // being siblings. TODO: ask dev for row testids (event-price, booking-customer, booking-tickets, booking-total).
+        // No testids here: anchor on the label, hop to its row ('..'), assert the row's [label, value] children.
+        // Assumes each row is exactly those two elements. TODO: ask dev for row testids (event-price, booking-*).
         this.eventPrice = page.getByText('Price per ticket', { exact: true }).locator('..');
         this.eventCustomerFullNameField = page.getByRole('textbox', { name: 'Full Name*' });
         this.eventCustomerEmailField = page.getByTestId('customer-email');

@@ -29,7 +29,8 @@ you can point at the line that satisfies it. Anything ❌ goes back to the autho
 - [ ] **No missing `await`** on actions/assertions.
 - [ ] Assertions are **web-first** (`await expect(locator)…`), not a manual read-then-compare.
 - [ ] Assertions check **content**, not mere presence: prefer `toHaveText(...)` (exact, or an array for a
-      label/value row) over `getByText(value).toBeVisible()`, so a failure shows **Expected vs Received**.
+      label/value row **only when the row is exactly those two elements**; otherwise assert the value element
+      directly) over `getByText(value).toBeVisible()`, so a failure shows **Expected vs Received**.
 - [ ] The assertion was seen **failing** at least once (a quick mutation: wrong expected value) — a check
       that can't fail proves nothing.
 - [ ] **No `page.waitForTimeout(<number>)`** / fixed sleeps.
