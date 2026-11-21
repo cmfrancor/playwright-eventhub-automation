@@ -32,7 +32,7 @@ Artifact). "I didn't find X so I added it to `helpers/`" is a good line; silentl
 |---|---|---|
 | Specs | `tests/` (`logged-in/`, `unlogged-in/`) | The tests: Given/When/Then intent + **business assertions**. |
 | Page objects | `pages/` | Selectors (locators) + **actions** for one screen. One class per real page/component. |
-| Fixtures | `tests/fixtures/` (new) | `test.extend` — instantiate page objects, logged-in page, seeded data. |
+| Fixtures | `tests/fixtures.js` | `test.extend` — page objects (and later seeded data). Specs import `{ test, expect }` from here, not from `@playwright/test`. Declare the fixture types with JSDoc so `// @ts-check` sees them. Split into a folder only when it outgrows one file. |
 | API clients | `api/` (new, when needed) | Thin request helpers for seeding/teardown via API. |
 | Helpers | `helpers/` | Pure utilities: data generators, formatting. No page/DOM logic. |
 | Setup | `tests/auth.setup.js` | Builds `storageState` once per run. |
@@ -51,9 +51,11 @@ layering — protect it.
 - **Actions live in the page object**, named by business intent: `purchaseEvent(...)`,
   `selectRandomEvent()` — the test reads like a user story, not a selector soup.
 - **Business assertions live in the test**, so a failure report points at the test, not at a helper reused
-  in ten places. The grey zone: an assertion that only means *"the page reached a usable state"* (e.g.
-  `isHomePageVisible`, `isEventPageVisible`) may live in the page object as part of "arriving at the page".
-  Be consistent and be able to justify the line you drew.
+  in ten places. The grey zone: an assertion that only means *"the page reached a usable state"* — a
+  `waitForLoaded()` checking URL + a landmark — may live in the page object as part of "arriving at the page".
+  It must **not** check data the test cares about (e.g. the logged-in user's email after registering is the
+  test's *outcome*, so it belongs in the test). Name it `waitForLoaded`, not `is…Visible`, so it doesn't read
+  like a boolean that hides an assertion.
 - **One class per real page/component.** A page object that mixes two screens, or grows business logic
   (price math), is the anti-pattern — split by real page, or extract a shared component
   (`HeaderComponent`) that each page object composes instead of copying its selectors.

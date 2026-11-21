@@ -26,7 +26,7 @@ SendMessage — the orchestrator decides *what* changes, the author writes it). 
 substantive changes until it returns PASS.** This is the polishing loop; it runs before you see the result.
 
 ### 3. Pre-merge hygiene gate
-Confirm mechanically: suite (or at least `--grep @Smoke`) is green; no `test.only`/`page.pause`
+Confirm mechanically: suite (or at least `--grep @Smoke`) is green; `npm run typecheck` is clean; no `test.only`/`page.pause`
 (hooks + `forbidOnly`); no fixed sleeps; no `storageState`/secrets/`.env` staged; lint clean if ESLint is
 present; branch is up to date with `{base}` (rebase if behind).
 

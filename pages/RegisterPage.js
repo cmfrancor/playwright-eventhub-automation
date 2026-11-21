@@ -1,6 +1,3 @@
-import { expect } from '@playwright/test';
-
-
 export class RegisterPage {
     
     constructor(page) {
@@ -15,24 +12,15 @@ export class RegisterPage {
     }
 
 
+    async goto() {
+        await this.page.goto('/register');
+    }
+
     async register(email, password = 'Password123!', confirmPassword = 'Password123!') {
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.confirmPasswordInput.fill(confirmPassword);
         await this.registerButton.click();
     }
-
-    async expectPasswordInvalid() {
-        await expect(this.invalidPasswordErrorMessage).toBeVisible();
-    }
-
-    async expectConfirmPasswordDifferent() {
-        await expect(this.differentPasswordsErrorMessage).toBeVisible();
-    }
-
-    async expectEmailInvalid() {
-        await expect(this.invalidEmailErrorMessage).toBeVisible();
-    }
-
 
 }

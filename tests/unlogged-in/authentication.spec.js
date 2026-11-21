@@ -1,27 +1,18 @@
 // @ts-check
-import { test } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import {randomEmail} from '../../helpers/randomHelper'
-import { RegisterPage } from '../../pages/RegisterPage';
-import { HomePage} from '../../pages/HomePage';
 
 const userEmail = randomEmail();
-/** @type {RegisterPage} */
-let registerPage;
-/** @type {HomePage} */
-let homePage;
 
-test.beforeEach(async ({ page }) => {
-  registerPage = new RegisterPage(page);
-  homePage = new HomePage(page);
-  await page.goto('https://eventhub.rahulshettyacademy.com/register');
+test.beforeEach(async ({ registerPage }) => {
+  await registerPage.goto();
 })
 
-test('Register successfully', async ({ page }) => {
+test('Register successfully', async ({ registerPage, homePage }) => {
   await registerPage.register(userEmail);
 
-  // Verify user is redirected to the homepage
-  await homePage.isHomePageVisible(userEmail);
-
+  await homePage.waitForLoaded();
+  await expect(homePage.userEmailLabel).toHaveText(userEmail);
 });
 
 const invalidPasswordCases = [
@@ -32,18 +23,18 @@ const invalidPasswordCases = [
 ]
 
 for (const { password, reason } of invalidPasswordCases) {
-  test(`Invalid Registration -  ${reason}`, async ({ page }) => {
+  test(`Invalid Registration -  ${reason}`, async ({ registerPage }) => {
     await registerPage.register(userEmail, password)
 
-    await registerPage.expectPasswordInvalid()
+    await expect(registerPage.invalidPasswordErrorMessage).toBeVisible();
 
   });
 }
 
-test('Invalid Registration - Passwords do not match', async({page}) => {
+test('Invalid Registration - Passwords do not match', async({ registerPage }) => {
   await registerPage.register(userEmail, 'Password123!', 'DifferentPassword')
 
-  await registerPage.expectConfirmPasswordDifferent();
+  await expect(registerPage.differentPasswordsErrorMessage).toBeVisible();
 })
 
 const invalidEmailCases = [
@@ -53,10 +44,10 @@ const invalidEmailCases = [
 ]
 
 for (const { email, reason } of invalidEmailCases) {
-  test(`Invalid Registration -  ${reason}`, async ({ page }) => {
+  test(`Invalid Registration -  ${reason}`, async ({ registerPage }) => {
     await registerPage.register(email)
 
-    await registerPage.expectEmailInvalid()
+    await expect(registerPage.invalidEmailErrorMessage).toBeVisible();
 
   });
 }

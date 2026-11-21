@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "es2022",
+    "skipLibCheck": true
+  },
+  "include": ["tests/**/*.js", "pages/**/*.js", "helpers/**/*.js", "playwright.config.js"]
+}
