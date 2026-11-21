@@ -5,7 +5,8 @@ are the **source of truth**; skills and agents read them, they don't re-encode t
 disagree, this doc wins (or we update it on purpose).
 
 > Companion docs: `locator-strategy.md`, `test-isolation-and-data.md`, `review-checklist.md` (what the
-> human verifies), `teaching-artifact.md` (the explainer we publish with each automation).
+> human verifies), `anti-pattern-glossary.md` (the Alto/Medio/Bajo codes), `teaching-artifact.md` (the
+> explainer we publish with each automation).
 
 ## Reuse first — the non-negotiable rule
 

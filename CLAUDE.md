@@ -45,6 +45,7 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 - `.claude/docs/locator-strategy.md` — locator hierarchy, hard rules, justification.
 - `.claude/docs/test-isolation-and-data.md` — isolation, waiting, session, API/hybrid data, mocking.
 - `.claude/docs/review-checklist.md` — **what the QA verifies in AI output** (the central rubric).
+- `.claude/docs/anti-pattern-glossary.md` — the Alto/Medio/Bajo codes the checklist and reviewer cite.
 - `.claude/docs/teaching-artifact.md` — the explainer standard.
 
 ## Agents & skills
@@ -73,7 +74,7 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 ```
 .claude/
   agents/{automation-engineer,automation-reviewer}.md
-  docs/{automation-conventions,locator-strategy,test-isolation-and-data,review-checklist,teaching-artifact}.md
+  docs/{automation-conventions,locator-strategy,test-isolation-and-data,review-checklist,anti-pattern-glossary,teaching-artifact}.md
   hooks/pre-tool-use/{block-focused-tests,block-fixed-sleeps,warn-fragile-locators}.sh
   skills/{audit-repo,automate-flow,scaffold-page,harden-locators,review-automation,open-pr}/SKILL.md
   settings.json

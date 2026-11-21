@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "_comment": "Automation guardrails. PreToolUse hooks run on Write/Edit/MultiEdit and only act on files under tests/ or pages/. block-* exit 2 (refuse); warn-* exits 0 (nudge only). The real gate is automation-reviewer + /review-automation.",
+  "_comment": "Automation guardrails. PreToolUse hooks run on Write/Edit/MultiEdit and only act on files under tests/, pages/, api/ or helpers/. block-* exit 2 (refuse); warn-* exits 0 (nudge only). The real gate is automation-reviewer + /review-automation.",
   "hooks": {
     "PreToolUse": [
       {

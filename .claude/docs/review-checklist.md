@@ -61,6 +61,11 @@ you can point at the line that satisfies it. Anything ❌ goes back to the autho
 - [ ] Test title carries tags for `--grep` (`@Smoke`, `@TICKET-NN`, section) so suites can be sliced.
 - [ ] Smoke vs regression split is respected (smoke = fast, must-pass).
 
+## 8. Mocking  *(Medio10–11 — only when the test uses `page.route`)*
+- [ ] Mocks honor the real contract (same shape/status the backend returns).
+- [ ] No over-mocking — real integration is still covered; mocks only for hard-to-trigger cases / third parties.
+- [ ] **N/A** if the test uses no mocks (say so, so coverage is explicit).
+
 ---
 
 ### Verdict

@@ -51,6 +51,6 @@ If anything here conflicts with those files, the files win — and flag the drif
    validator.
 
 ## What good output looks like
-A test that reads like a user story (business-named actions), locators scoped and justified, web-first
-assertions, independent and unique-data, session via `storageState`, zero fixed sleeps, nothing duplicated —
-plus the explainer that teaches the reader to verify all of the above.
+A test that reads like a user story, built to the conventions in the docs, nothing duplicated, shipping with
+the teaching Artifact that lets the reader verify it. If it would fail any group of `review-checklist.md`,
+it isn't done.
