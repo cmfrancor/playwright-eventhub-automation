@@ -53,6 +53,9 @@ Every explanation must lead the reader to the exact code it describes:
   shorthands like `ticketsRow`. If a shorthand helps, define it and give the real name next to it.
 - **Label every "before"**: is it what was on `main`, or an intermediate draft the reviewer caught? Say which.
 - Close the change map with a link to the PR's "Files changed" tab.
+- **The "what to verify" checklist follows the same rule**: each item names its checklist group in words
+  (not `§1`), spells out the anti-pattern code with its meaning ("Alto5 · locators tied to layout/position"),
+  and links to the exact lines where the reviewer can check it. Persist the checkbox state per viewer.
 
 ## Style
 - Short paragraphs, one idea per line. Tables for locator decisions and the checklist.
