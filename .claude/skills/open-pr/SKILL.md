@@ -39,6 +39,10 @@ Present ONE checkpoint:
 - the proposed **PR title + body**,
 - the linked **teaching Artifact** (if the change added/changed automation).
 
+**Every PR description links its teaching Artifact** near the top (`📘 Teaching Artifact: <url>`), so the
+reviewer can reopen it any time from GitHub. If the Artifact is published after the PR is created, add the
+link with `gh pr edit <n> --body-file …` before asking for approval.
+
 Then **wait for your explicit approval.** Nothing is pushed or merged before it.
 
 ### 5. On approval — open/merge

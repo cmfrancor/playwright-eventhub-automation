@@ -25,7 +25,7 @@ export class HomePage {
     }
 
     async selectRandomEvent() {
-        await expect(this.bookableEvents.first(), 'no event has seats left to book').toBeVisible();
+        await expect(this.bookableEvents, 'no event has seats left to book').not.toHaveCount(0);
         const numberOfEvents = await this.bookableEvents.count();
         const randomEventNumber = randomNumber(0, numberOfEvents - 1);
         // .nth() y .locator() son síncronos: devuelven Locators, no necesitan await

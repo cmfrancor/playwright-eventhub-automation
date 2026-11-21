@@ -31,6 +31,11 @@ output — not just accept it. This is a first-class deliverable, not an afterth
 8. **Open questions / limitations** — e.g. "no seed API on EventHub, so data is UI-created"; anything we'd
    ask a developer for (a missing `data-testid`).
 
+## Where it lives
+
+One Artifact per PR, **linked from the PR description** (`📘 Teaching Artifact: <url>`) so it can be reopened
+from GitHub whenever needed. Keep updating the same Artifact (same URL) while the PR is iterated.
+
 ## Format: a guided review, one card per change
 
 The artifact is how the human **reviews and approves** the PR, so structure it as a guided review, not an essay:

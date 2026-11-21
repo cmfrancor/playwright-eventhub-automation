@@ -56,18 +56,21 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 ## This repo (context the system assumes)
 
 - Layers: `pages/` (EventPage, HomePage, LoginPage, RegisterPage), `tests/` (`logged-in/`, `unlogged-in/`),
+  `tests/fixtures.js` (page objects as fixtures — specs import `{ test, expect }` from here),
   `helpers/randomHelper.js` (`randomEmail`, `randomNumber`), `tests/auth.setup.js` (builds `storageState`).
-- `playwright.config.js`: `setup` project + `storageState: playwright/.auth/user.json`; reporter `html`;
-  trace `on-first-retry`; **`slowMo: 500`** — a global per-action delay, debug-only; it contradicts the
-  no-fixed-waits ethos and must be 0/removed for CI. `.env`, `playwright/.auth/`, reports are gitignored.
-- **Known anti-patterns to fix in the first PR** (found in the audit): fragile locators in
-  `pages/EventPage.js` — **including but not limited to** `getByText('$').nth(1)`, `locator('div h1')`,
-  `locator('span.booking-ref')`, the `span:has-text(...) + span` sibling selectors, and bare
-  `getByText('View My Bookings')` used as a selector (`/harden-locators` greps the file, it doesn't trust a
-  fixed list); page objects `new`-ed in `beforeEach` instead of delivered as fixtures; customer data from
-  env only (no API seed — though EventHub *does* expose a Swagger API, see `test-isolation-and-data.md`);
-  the config's global `slowMo: 500`; business assertions living inside the page object. The first
-  improvement PR fixes these, explaining for each the anti-pattern and the senior pattern.
+- Page objects hold locators, actions, `goto()` and `waitForLoaded()` only; **every outcome assertion lives in
+  the test**. Label/value rows are read through `EventPage.confirmationValue(label)` (one place owns the
+  row-structure assumption).
+- `playwright.config.js`: `setup` project + `storageState: playwright/.auth/user.json`; `baseURL` from
+  `BASE_URL` (default EventHub); reporter `html`; trace `on-first-retry`; `slowMo` off by default
+  (`SLOWMO=500` to watch a run). `.env`, `playwright/.auth/`, `.playwright-mcp/`, reports are gitignored.
+- `npm test` runs the suite; `npm run typecheck` runs `tsc` over `// @ts-check` files (needs `npm install`).
+- **Still open** (see the PR history): bookings consume real seats that nothing releases — the purchase test
+  only picks events with seats left (interim); the real fix is Phase 3 (API seeding + teardown via the
+  EventHub Swagger API). The `setup` depends on a fixed account in `.env` that the sandbox can expire. No
+  test tags (`@Smoke`) yet; `randomEmail()` is shared across the registration tests.
+- History: PR #7 hardened the locators; PR #8 moved to fixtures + assertions in tests. Each PR description
+  links its teaching Artifact.
 
 ## Structure
 
