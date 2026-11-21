@@ -13,6 +13,8 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 3. /automate-flow    A flow -> E2E test (POM + fixtures + API/hybrid data). Author -> reviewer -> you approve.
 4. /harden-locators  Replace fragile locators (nth/xpath/position) with stable, justified ones.
 5. /review-automation Run the checklist over the diff; map every finding to a checklist item. You validate.
+6. /open-pr          Merge gate: adversarial review round(s) polish the diff to PASS, hygiene gate, then
+                     you approve before merge. Nothing merges without your go-ahead.
                      -> Each created/changed automation ships a teaching Artifact (the explainer).
 ```
 
@@ -25,6 +27,9 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 3. **Author ≠ reviewer.** Drafting is delegated to `automation-engineer` (strong model); adversarial
    verification to `automation-reviewer` (cheap, read-only). The author never self-certifies. Review runs
    **before** you see the result.
+4. **Every PR passes the merge gate** (`/open-pr`): one or more adversarial review rounds polish the diff
+   to PASS, then a human checkpoint. A reviewer PASS is necessary but not sufficient — **your approval is
+   the merge condition.** (Reused from the qa-agentico publish checkpoint.)
 4. **Teach every change.** Created/changed automation ships a plain-language **teaching Artifact**
    (`.claude/docs/teaching-artifact.md`): what each part does and *why this locator is the best choice*.
 5. **Guardrails are hooks, not vibes** (`.claude/hooks/`): no `test.only`/`page.pause`, no fixed
@@ -43,7 +48,7 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 ## Agents & skills
 
 - Agents: `.claude/agents/automation-engineer.md` (author), `.claude/agents/automation-reviewer.md` (reviewer).
-- Skills: `.claude/skills/{audit-repo,automate-flow,scaffold-page,harden-locators,review-automation}/SKILL.md`.
+- Skills: `.claude/skills/{audit-repo,automate-flow,scaffold-page,harden-locators,review-automation,open-pr}/SKILL.md`.
 
 ## This repo (context the system assumes)
 
@@ -64,7 +69,7 @@ tests as to grow the QA's eye for *what to verify in AI output*.
   agents/{automation-engineer,automation-reviewer}.md
   docs/{automation-conventions,locator-strategy,test-isolation-and-data,review-checklist,teaching-artifact}.md
   hooks/pre-tool-use/{block-focused-tests,block-fixed-sleeps,warn-fragile-locators}.sh
-  skills/{audit-repo,automate-flow,scaffold-page,harden-locators,review-automation}/SKILL.md
+  skills/{audit-repo,automate-flow,scaffold-page,harden-locators,review-automation,open-pr}/SKILL.md
   settings.json
 CLAUDE.md
 ```
