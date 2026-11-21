@@ -31,6 +31,26 @@ output — not just accept it. This is a first-class deliverable, not an afterth
 8. **Open questions / limitations** — e.g. "no seed API on EventHub, so data is UI-created"; anything we'd
    ask a developer for (a missing `data-testid`).
 
+## Where it lives
+
+One Artifact per PR, **linked from the PR description** (`📘 Teaching Artifact: <url>`) so it can be reopened
+from GitHub whenever needed. Keep updating the same Artifact (same URL) while the PR is iterated.
+
+## Format: a guided review, one card per change
+
+The artifact is how the human **reviews and approves** the PR, so structure it as a guided review, not an essay:
+- **Top**: how many changes, a progress bar, and an index of change titles.
+- **One card per change**, always in the same order: (1) the change in one plain sentence, (2) the problem it
+  solved, (3) the real code with a **plain-language note next to each line or block**, (4) a worked example with
+  real data, (5) what could break it, (6) links to the exact lines, (7) **"I understand and approve" / "I have a
+  question"** buttons (question opens a text box). Persist the state per viewer.
+- **Chained locators get an interactive step-through**: Previous/Next buttons walk the chain one call at a time,
+  highlighting on the real HTML the search scope and the element selected at that step, with the current call
+  highlighted in the code.
+- **Bottom**: open items, and an auto-filled summary of the reviewer's questions ready to paste back into chat.
+  The merge prompt appears only when every change is approved.
+- Test it in a real browser before publishing (step through, click the buttons, check for JS errors).
+
 ## Readable without opening the code
 
 The reader must understand every decision **from the Artifact alone**:

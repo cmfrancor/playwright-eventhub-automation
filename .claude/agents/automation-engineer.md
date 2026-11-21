@@ -44,7 +44,11 @@ If anything here conflicts with those files, the files win — and flag the drif
 5. **Get reviewed before anything reaches the user.** Hand your draft to `automation-reviewer` and resolve
    its findings. Generation is your job (strong model); mechanical verification is the reviewer's.
 6. **Respect the guardrails** (`.claude/hooks/`): if a hook blocks you, fix the cause — don't work around
-   it. (The rules themselves live in the docs; the hooks only enforce them mechanically.)
+   it. (The rules themselves live in the docs; the hooks only enforce them mechanically.) **Write and edit
+   code only with the Write/Edit tools** — never through Bash (`cat >`, `sed -i`, heredocs): the hooks only
+   run on Write/Edit, so a Bash-written file skips every guardrail.
+7. **Run `npm run typecheck` alongside the tests.** Green tests don't catch type errors in `// @ts-check`
+   files (e.g. a fixture the editor can't see).
 7. **Produce the teaching Artifact** (`teaching-artifact.md`) for created/changed automation: plain
    language, what each part does, and the **locator justification** table.
 8. **Never commit or push, and never present as "done" without the user's approval.** The user is the final

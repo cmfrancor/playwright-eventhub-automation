@@ -55,6 +55,7 @@ you can point at the line that satisfies it. Anything ❌ goes back to the autho
 - [ ] Actions are named by **business intent**; locators are readable properties.
 
 ## 6. Repo hygiene  *(Bajo13–14)*
+- [ ] `npm run typecheck` is clean (green tests don't catch type errors in `// @ts-check` files).
 - [ ] **No `test.only` / `describe.only` / `page.pause()`** left behind (a hook blocks these; CI
       `forbidOnly` would fail anyway).
 - [ ] Trace config is `on-first-retry` (not `'on'`) for CI cost.

@@ -1,35 +1,24 @@
-import { test } from '@playwright/test';
-import {randomEmail} from '../../helpers/randomHelper'
-import { RegisterPage } from '../../pages/RegisterPage';
-import { HomePage} from '../../pages/HomePage';
-import { EventPage } from '../../pages/EventPage'
+// @ts-check
+import { test, expect } from '../fixtures';
 
-/** @type {RegisterPage} */
-let registerPage;
-/** @type {HomePage} */
-let homePage;
-/** @type {EventPage} */
-let eventPage;
-
-let eventName = '';
-let eventPrice = '';
-let bookingRef = '';
 const customerEmail = process.env.EVENTHUB_EMAIL;
 const customerName = process.env.CUSTOMER_NAME;
 const customerPhoneNumber = process.env.CUSTOMER_PHONE_NUMBER;
 
-test.beforeEach(async ({ page }) => {
-  registerPage = new RegisterPage(page);
-  homePage = new HomePage(page);
-  eventPage = new EventPage(page);
-  await page.goto('https://eventhub.rahulshettyacademy.com');
-})
+test('Purchase Event', async ({ homePage, eventPage }) => {
+  await homePage.goto();
+  const { name, price } = await homePage.selectRandomEvent();
+  await eventPage.waitForLoaded();
+  await expect(eventPage.eventNameTitle).toHaveText(name);
+  await expect(eventPage.eventPrice).toHaveText(price);
 
-test('Purchase Event', async ({ page }) => {
-    const result = await homePage.selectRandomEvent();
-    eventName = result.name;
-    eventPrice = result.price;
-    await eventPage.isEventPageVisible(eventName, eventPrice);
-    await eventPage.purchaseEvent(customerName,customerEmail,customerPhoneNumber);
-    bookingRef = await eventPage.isPurchaseConfirmed(customerName, eventPrice);
+  await eventPage.purchaseEvent(customerName, customerEmail, customerPhoneNumber);
+
+  await expect(eventPage.eventConfirmationHeading).toHaveText('Booking Confirmed! 🎉');
+  await expect(eventPage.confirmationValue('Customer')).toHaveText(customerName);
+  await expect(eventPage.confirmationValue('Tickets')).toHaveText('1');
+  // Single ticket, so the total equals the unit price.
+  await expect(eventPage.confirmationValue('Total')).toHaveText(price);
+  await expect(eventPage.confirmationValue('Booking Ref')).not.toBeEmpty();
+  await expect(eventPage.eventViewMyBookingsLink).toBeVisible();
 });
