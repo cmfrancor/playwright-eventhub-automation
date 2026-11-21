@@ -52,9 +52,10 @@ by default.
   through the UI. Order is **API first (state), UI after (experience)**.
 - **Teardown runs always** (even on failure): a cleanup hook that deletes the unique record by API, using
   the same unique id you generated at the start — not depending on the test outcome.
-- **EventHub caveat**: it's a third-party practice app and may not expose a seed/cleanup API. Where there's
-  no API, fall back to unique-data-by-UI + `storageState`, and mark it as a real limitation (not a
-  shortcut). Teach the API pattern anyway so it transfers to a real product.
+- **EventHub has an API** — Swagger at `https://api.eventhub.rahulshettyacademy.com/api/docs/`. So
+  seed/cleanup by API is viable here, not just theory. Building that data layer (an `api/` client + fixtures
+  that seed state) is a **planned next step**; until it exists, current tests create data through the UI.
+  When we add it: API-first for state, UI only for the flow under test, teardown by API with the unique id.
 
 ## Mocking (`page.route`) — sparingly, honor the contract
 
