@@ -28,7 +28,7 @@ export class EventPage {
         await this.page.waitForURL('**/events/**');
         await expect(this.eventPageBreadCrumb).toBeVisible();
         await expect(this.eventNameTitle).toHaveText(eventName);
-        await expect(this.eventPrice.getByText(eventPrice, { exact: true })).toBeVisible();
+        await expect(this.eventPrice.locator('p')).toHaveText(['Price per ticket', eventPrice]);
     }
 
     async purchaseEvent(customerName, customerEmail, customerPhoneNumber){
@@ -41,9 +41,9 @@ export class EventPage {
     async isPurchaseConfirmed(customerName, expectedTotal, ticketsNumber = 1) {
         await expect(this.eventViewMyBookingsLink).toBeVisible();
         await expect(this.eventConfirmationHeading).toHaveText('Booking Confirmed! 🎉');
-        await expect(this.eventConfirmationCustomerName.getByText(customerName, { exact: true })).toBeVisible();
-        await expect(this.eventConfirmationTicketsNumber.getByText(String(ticketsNumber), { exact: true })).toBeVisible();
-        await expect(this.eventConfirmationTotal.getByText(expectedTotal, { exact: true })).toBeVisible();
+        await expect(this.eventConfirmationCustomerName.locator('span')).toHaveText(['Customer', customerName]);
+        await expect(this.eventConfirmationTicketsNumber.locator('span')).toHaveText(['Tickets', String(ticketsNumber)]);
+        await expect(this.eventConfirmationTotal.locator('span')).toHaveText(['Total', expectedTotal]);
         return this.eventConfirmationBookingRef.innerText();
     }
 
