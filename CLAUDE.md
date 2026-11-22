@@ -55,22 +55,32 @@ tests as to grow the QA's eye for *what to verify in AI output*.
 
 ## This repo (context the system assumes)
 
-- Layers: `pages/` (EventPage, HomePage, LoginPage, RegisterPage), `tests/` (`logged-in/`, `unlogged-in/`),
-  `tests/fixtures.js` (page objects as fixtures — specs import `{ test, expect }` from here),
-  `helpers/randomHelper.js` (`randomEmail`, `randomNumber`), `tests/auth.setup.js` (builds `storageState`).
+- Layers: `pages/` (EventPage, HomePage, LoginPage, MyBookingsPage, RegisterPage), `tests/` (`logged-in/`, `unlogged-in/`),
+  `tests/fixtures.js` (page objects + API data fixtures — specs import `{ test, expect }` from here),
+  `api/EventHubApi.js` (thin client over the EventHub API, for seeding/teardown/backend checks),
+  `helpers/randomHelper.js` (`randomEmail`, `randomNumber`).
+- Data & session (`tests/fixtures.js`): each worker registers **one fresh user via the API** (`account`);
+  logged-in tests get its token injected as `storageState` (localStorage `eventhub_token`) via the
+  `authenticated` option; the purchase test books its **own event** (`event` fixture, created via API and
+  **always deleted in teardown**, which cascades its bookings). The 3 featured events are shared by every
+  user of the practice app, so tests don't book them. API base: `API_URL` (default EventHub API).
+- The purchase journey navigates by UI (home card → event → confirmation → My Bookings) and asserts what the
+  user sees there; the API check covers only what the UI doesn't show (the stored customer email).
+  `EventPage.goto(id)` is kept for future focused tests and is currently unused (deliberate).
 - Page objects hold locators, actions, `goto()` and `waitForLoaded()` only; **every outcome assertion lives in
   the test**. Label/value rows are read through `EventPage.confirmationValue(label)` (one place owns the
   row-structure assumption).
-- `playwright.config.js`: `setup` project + `storageState: playwright/.auth/user.json`; `baseURL` from
-  `BASE_URL` (default EventHub); reporter `html`; trace `on-first-retry`; `slowMo` off by default
-  (`SLOWMO=500` to watch a run). `.env`, `playwright/.auth/`, `.playwright-mcp/`, reports are gitignored.
+- `playwright.config.js`: no `setup` project; the logged-in project sets `authenticated: true`; `baseURL`
+  from `BASE_URL` and `apiURL` from `API_URL` (defaults: EventHub app/API); reporter `html`; trace
+  `retain-on-failure` locally, `on-first-retry` in CI; `slowMo` off by default
+  (`SLOWMO=500` to watch a run). `.env` needs no account vars (only optional `BASE_URL`/`API_URL`/`SLOWMO`).
+  `.env`, `playwright/.auth/`, `.playwright-mcp/`, reports are gitignored.
 - `npm test` runs the suite; `npm run typecheck` runs `tsc` over `// @ts-check` files (needs `npm install`).
-- **Still open** (see the PR history): bookings consume real seats that nothing releases — the purchase test
-  only picks events with seats left (interim); the real fix is Phase 3 (API seeding + teardown via the
-  EventHub Swagger API). The `setup` depends on a fixed account in `.env` that the sandbox can expire. No
-  test tags (`@Smoke`) yet; `randomEmail()` is shared across the registration tests.
-- History: PR #7 hardened the locators; PR #8 moved to fixtures + assertions in tests. Each PR description
-  links its teaching Artifact.
+- Registration tests generate a unique email **per test** (`randomEmail()`: timestamp + random string).
+- **Still open**: no test tags (`@Smoke`) yet.
+- History: PR #7 hardened the locators; PR #8 moved to fixtures + assertions in tests; Phase 3 added the API
+  data layer (per-worker user, own event + teardown, UI journey + API check of what the UI can't show). Each PR description links its
+  teaching Artifact.
 
 ## Structure
 

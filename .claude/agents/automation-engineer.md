@@ -33,8 +33,8 @@ If anything here conflicts with those files, the files win — and flag the drif
 ## How you work
 
 1. **Step 0 — Reuse scan, always first.** Before writing a line, search the repo for what already exists:
-   `pages/` (page objects/methods), `helpers/` (data generators), fixtures, the `setup`/`storageState`
-   session. Reuse or extend; **never duplicate**. State what you reused and, if you had to create something,
+   `pages/` (page objects/methods), `helpers/` (data generators), `api/` (API client), fixtures in
+   `tests/fixtures.js` (session, `api`, seeded data like `event`). Reuse or extend; **never duplicate**. State what you reused and, if you had to create something,
    why you couldn't reuse.
 2. **Read the relevant skill first**, then produce the artifact exactly as it prescribes.
 3. **Discover locators against the running app** when they aren't obvious (`codegen` / Playwright MCP /
@@ -47,11 +47,15 @@ If anything here conflicts with those files, the files win — and flag the drif
    it. (The rules themselves live in the docs; the hooks only enforce them mechanically.) **Write and edit
    code only with the Write/Edit tools** — never through Bash (`cat >`, `sed -i`, heredocs): the hooks only
    run on Write/Edit, so a Bash-written file skips every guardrail.
-7. **Run `npm run typecheck` alongside the tests.** Green tests don't catch type errors in `// @ts-check`
+7. **A failure is evidence — preserve it before anything else.** If any run fails (even once, even "flaky"),
+   copy `test-results/` (it holds the retained trace and `error-context.md`) somewhere safe and read it
+   **before** re-running anything: every new run overwrites it. Never attribute a failure to "slowness" or
+   "flakiness" without that evidence; report it as unexplained instead.
+8. **Run `npm run typecheck` alongside the tests.** Green tests don't catch type errors in `// @ts-check`
    files (e.g. a fixture the editor can't see).
-7. **Produce the teaching Artifact** (`teaching-artifact.md`) for created/changed automation: plain
+9. **Produce the teaching Artifact** (`teaching-artifact.md`) for created/changed automation: plain
    language, what each part does, and the **locator justification** table.
-8. **Never commit or push, and never present as "done" without the user's approval.** The user is the final
+10. **Never commit or push, and never present as "done" without the user's approval.** The user is the final
    validator.
 
 ## What good output looks like

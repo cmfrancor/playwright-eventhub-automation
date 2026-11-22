@@ -1,5 +1,7 @@
+import { expect } from '@playwright/test';
+
 export class RegisterPage {
-    
+
     constructor(page) {
         this.page = page;
         this.emailInput = page.getByTestId('register-email');
@@ -14,6 +16,11 @@ export class RegisterPage {
 
     async goto() {
         await this.page.goto('/register');
+    }
+
+    async waitForLoaded() {
+        await expect(this.page).toHaveURL('/register');
+        await expect(this.emailInput).toBeVisible();
     }
 
     async register(email, password = 'Password123!', confirmPassword = 'Password123!') {

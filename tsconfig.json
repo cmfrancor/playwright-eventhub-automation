@@ -8,5 +8,5 @@
     "target": "es2022",
     "skipLibCheck": true
   },
-  "include": ["tests/**/*.js", "pages/**/*.js", "helpers/**/*.js", "playwright.config.js"]
+  "include": ["tests/**/*.js", "pages/**/*.js", "helpers/**/*.js", "api/**/*.js", "playwright.config.js"]
 }

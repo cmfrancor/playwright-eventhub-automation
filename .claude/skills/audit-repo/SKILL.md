@@ -15,8 +15,8 @@ code.
 ## Steps
 
 ### 1. Scan the repo
-Read `playwright.config.js`, `pages/`, `tests/`, `helpers/`, `tests/auth.setup.js`. Note the layers that
-exist and how session/data are handled today.
+Read `playwright.config.js`, `pages/`, `tests/` (incl. `tests/fixtures.js`), `api/`, `helpers/`. Note the
+layers that exist and how session/data are handled today.
 
 ### 2. Run the checklist across the code
 Go through every group of `.claude/docs/review-checklist.md` against the real files. Grep for the usual

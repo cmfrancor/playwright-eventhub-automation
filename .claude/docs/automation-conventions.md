@@ -15,8 +15,8 @@ makes the suite scale. Every skill starts with a **Reuse scan** (Step 0):
 
 - **Page objects** (`pages/`) — is there already a page object (or a method) for this screen/flow?
   Extend it; don't make a second one. Method you need almost-exists? Generalize it, keep one.
-- **Session/auth** — logged-in flows reuse the `setup` project + `storageState`
-  (`playwright/.auth/user.json`, built by `tests/auth.setup.js`). Never re-login through the UI inside a
+- **Session/auth** — logged-in flows reuse the per-worker API `account` + `authenticated` option in
+  `tests/fixtures.js` (token injected as `storageState`). Never re-login through the UI inside a
   test (see `test-isolation-and-data.md`).
 - **Data generation** — unique values come from `helpers/randomHelper.js` (`randomEmail()`, `randomNumber()`).
   Need another generator? Add it there; don't inline `Date.now()` in a spec.
@@ -32,11 +32,10 @@ Artifact). "I didn't find X so I added it to `helpers/`" is a good line; silentl
 |---|---|---|
 | Specs | `tests/` (`logged-in/`, `unlogged-in/`) | The tests: Given/When/Then intent + **business assertions**. |
 | Page objects | `pages/` | Selectors (locators) + **actions** for one screen. One class per real page/component. |
-| Fixtures | `tests/fixtures.js` | `test.extend` — page objects (and later seeded data). Specs import `{ test, expect }` from here, not from `@playwright/test`. Declare the fixture types with JSDoc so `// @ts-check` sees them. Split into a folder only when it outgrows one file. |
-| API clients | `api/` (new, when needed) | Thin request helpers for seeding/teardown via API. |
+| Fixtures | `tests/fixtures.js` | `test.extend` — page objects, the per-worker API `account`, session (`authenticated` → `storageState`), `api`, seeded data (`event`). Specs import `{ test, expect }` from here, not from `@playwright/test`. Declare the fixture types with JSDoc so `// @ts-check` sees them. Split into a folder only when it outgrows one file. |
+| API clients | `api/` (`EventHubApi.js`) | Thin request helpers for seeding/teardown/backend checks via API. No assertions. |
 | Helpers | `helpers/` | Pure utilities: data generators, formatting. No page/DOM logic. |
-| Setup | `tests/auth.setup.js` | Builds `storageState` once per run. |
-| Config | `playwright.config.js` | Projects, `storageState` wiring, reporter, trace. |
+| Config | `playwright.config.js` | Projects (`authenticated: true` for logged-in), reporter, trace. |
 
 When the UI changes you fix **one** place (the page object), not 30 specs. That is the whole point of the
 layering — protect it.
@@ -49,7 +48,9 @@ layering — protect it.
 - **Locators as readable properties** in the constructor (`this.confirmBookingButton = ...`). Follow
   `locator-strategy.md` for which locator to pick.
 - **Actions live in the page object**, named by business intent: `purchaseEvent(...)`,
-  `selectRandomEvent()` — the test reads like a user story, not a selector soup.
+  `login(...)` — the test reads like a user story, not a selector soup. Journey tests reach a screen the way
+  a user does (`homePage.openEvent(title)`); `goto(id)` deep links are for focused tests whose subject isn't
+  navigation (see `test-isolation-and-data.md`).
 - **Business assertions live in the test**, so a failure report points at the test, not at a helper reused
   in ten places. The grey zone: an assertion that only means *"the page reached a usable state"* — a
   `waitForLoaded()` checking URL + a landmark — may live in the page object as part of "arriving at the page".

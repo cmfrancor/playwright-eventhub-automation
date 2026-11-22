@@ -2,13 +2,13 @@
 import { test, expect } from '../fixtures';
 import {randomEmail} from '../../helpers/randomHelper'
 
-const userEmail = randomEmail();
-
 test.beforeEach(async ({ registerPage }) => {
   await registerPage.goto();
+  await registerPage.waitForLoaded();
 })
 
 test('Register successfully', async ({ registerPage, homePage }) => {
+  const userEmail = randomEmail();
   await registerPage.register(userEmail);
 
   await homePage.waitForLoaded();
@@ -24,7 +24,7 @@ const invalidPasswordCases = [
 
 for (const { password, reason } of invalidPasswordCases) {
   test(`Invalid Registration -  ${reason}`, async ({ registerPage }) => {
-    await registerPage.register(userEmail, password)
+    await registerPage.register(randomEmail(), password)
 
     await expect(registerPage.invalidPasswordErrorMessage).toBeVisible();
 
@@ -32,7 +32,7 @@ for (const { password, reason } of invalidPasswordCases) {
 }
 
 test('Invalid Registration - Passwords do not match', async({ registerPage }) => {
-  await registerPage.register(userEmail, 'Password123!', 'DifferentPassword')
+  await registerPage.register(randomEmail(), 'Password123!', 'DifferentPassword')
 
   await expect(registerPage.differentPasswordsErrorMessage).toBeVisible();
 })
