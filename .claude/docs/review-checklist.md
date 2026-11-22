@@ -44,7 +44,8 @@ you can point at the line that satisfies it. Anything ❌ goes back to the autho
 - [ ] Teardown/cleanup **runs always** (even on failure) when a record was created.
 
 ## 4. Session  *(Alto7, Bajo15)*
-- [ ] Logged-in flows reuse the `setup` project + `storageState` — **no UI login inside the test**.
+- [ ] Logged-in flows start authenticated (worker `account` registered via API, token injected through the
+      `storageState` fixture) — **no UI login inside the test**. The login form is tested once, on purpose.
 - [ ] `storageState` / credentials stay **out of git** and out of the code (env vars).
 
 ## 5. Architecture / POM  *(Medio12)*

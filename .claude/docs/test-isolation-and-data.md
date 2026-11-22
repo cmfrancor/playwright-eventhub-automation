@@ -16,13 +16,16 @@ by default.
 
 ## Session — log in once, reuse it
 
-- **Log in once per suite** via the `setup` project and `storageState`
-  (`tests/auth.setup.js` → `playwright/.auth/user.json`), already wired in `playwright.config.js`. Logged-in
-  tests start already authenticated.
+- **Log in once per worker, via the API**: the worker-scoped `account` fixture (`tests/fixtures.js`)
+  registers a fresh user through the API, and the `authenticated` option (set by the logged-in project in
+  `playwright.config.js`) injects its token as `storageState` (localStorage `eventhub_token`). Logged-in
+  tests start already authenticated; no `setup` project, no fixed account in `.env`.
 - **Never log in through the UI inside a test** (anti-pattern Alto7): slow, and a form change fails the
-  whole suite. The login form is tested **once**; everyone else enters with the saved session.
+  whole suite. The login form is tested **once** (`tests/unlogged-in/login.spec.js`); everyone else enters
+  with the injected session.
 - **`storageState` and credentials never touch git** (anti-pattern Bajo15). `playwright/.auth/` and `.env`
-  are already gitignored — keep it that way; passwords live in env vars.
+  are already gitignored — keep it that way; real passwords live in env vars. (The per-worker user's
+  password in `tests/fixtures.js` is a throwaway for an account created that run — not a secret.)
 
 ## Waiting — trust auto-wait, assert web-first
 
@@ -52,10 +55,19 @@ by default.
   through the UI. Order is **API first (state), UI after (experience)**.
 - **Teardown runs always** (even on failure): a cleanup hook that deletes the unique record by API, using
   the same unique id you generated at the start — not depending on the test outcome.
-- **EventHub has an API** — Swagger at `https://api.eventhub.rahulshettyacademy.com/api/docs/`. So
-  seed/cleanup by API is viable here, not just theory. Building that data layer (an `api/` client + fixtures
-  that seed state) is a **planned next step**; until it exists, current tests create data through the UI.
-  When we add it: API-first for state, UI only for the flow under test, teardown by API with the unique id.
+- **EventHub has an API, and the data layer is implemented** — Swagger at
+  `https://api.eventhub.rahulshettyacademy.com/api/docs/` (every call needs `Authorization: Bearer <token>`,
+  even where the spec doesn't mark it). `api/EventHubApi.js` is the thin client; `tests/fixtures.js` exposes
+  `api` (bound to the worker's token) and `event` (the test's own event, created via API and **always
+  deleted in teardown**, which also deletes its bookings). Each user's created data is sandboxed, but the 3
+  featured events are **shared by every user of the practice app** (their seats move with other people's
+  activity) — never book them in a test; seed your own.
+- **E2E journey tests navigate through the UI like a user** (home → card → event → My Bookings); deep links
+  (`goto(id)`) are for focused tests whose subject isn't navigation (e.g. booking-form validations).
+- **API prepares state and verifies only what the UI can't show; what the user sees is asserted in the UI**
+  (e.g. the booking appears in My Bookings with its title, tickets and status). The API check reads the
+  record by the id the UI displayed (the booking ref) and asserts the stored fields the UI doesn't expose,
+  with `toMatchObject`.
 
 ## Mocking (`page.route`) — sparingly, honor the contract
 

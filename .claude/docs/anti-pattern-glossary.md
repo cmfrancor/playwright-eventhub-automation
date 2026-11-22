@@ -17,8 +17,9 @@ apply when you verify AI output.
   indexing). Senior: `getByRole`/`getByTestId` scoped to a container; justify the choice.
 - **Alto6 — Tests that depend on a previous one.** Shared order/data/session. Senior: each test sets its
   own `Given`; independence unlocks parallelism.
-- **Alto7 — UI login in every test.** Slow and fragile. Senior: log in once via the `setup` project +
-  `storageState`; everyone else starts authenticated.
+- **Alto7 — UI login in every test.** Slow and fragile. Senior: build the session without the UI (here: a
+  worker fixture registers a user via API and injects its token via `storageState`) so tests start
+  authenticated; test the login form once, in its own test.
 
 ## Medio (medium impact)
 - **Medio8 — Data shared between workers.** A fixed record two parallel tests touch. Senior: unique data

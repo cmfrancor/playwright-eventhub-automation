@@ -27,33 +27,30 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL: process.env.BASE_URL || 'https://eventhub.rahulshettyacademy.com',
+    apiURL: process.env.API_URL || 'https://api.eventhub.rahulshettyacademy.com/api',
     launchOptions: {
       // Debug-only knob, off by default: SLOWMO=500 npx playwright test --headed
       slowMo: Number(process.env.SLOWMO) || 0,
     },
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    // CI retries, so it traces the retry; locally there are no retries, so keep the trace of any failure —
+    // otherwise a one-off failure leaves no evidence to diagnose.
+    trace: process.env.CI ? 'on-first-retry' : 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.js/ },
-
-    // Tests que NO necesitan login (registro): sin setup y sin sesión guardada.
     {
       name: 'unlogged in scenarios',
       testDir: './tests/unlogged-in',
       use: { ...devices['Desktop Chrome'] },
     },
 
-    // Tests que SÍ necesitan estar logueado (events): corren el setup antes
-    // y arrancan con la sesión ya cargada.
+    // `authenticated` (tests/fixtures.js) injects the worker's API token as the app session.
     {
       name: 'logged in scenarios',
       testDir: './tests/logged-in',
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
-      dependencies: ['setup'],
+      use: { ...devices['Desktop Chrome'], authenticated: true },
     },
 
     // {

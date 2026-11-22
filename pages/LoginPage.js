@@ -1,5 +1,5 @@
 export class LoginPage {
-    
+
     constructor(page) {
         this.page = page;
         this.emailInput = page.getByRole('textbox', { name: 'Email' });
@@ -8,7 +8,11 @@ export class LoginPage {
     }
 
 
-    async login(email, password = 'Password123!') {
+    async goto() {
+        await this.page.goto('/login');
+    }
+
+    async login(email, password) {
         await this.emailInput.fill(email);
         await this.passwordInput.fill(password);
         await this.signInButton.click();

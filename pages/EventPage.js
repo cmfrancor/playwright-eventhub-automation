@@ -4,7 +4,7 @@ export class EventPage {
 
     constructor(page) {
         this.page = page;
-        this.eventPageBreadCrumb = page.getByRole('main').getByRole('link', { name: 'Events' })
+        this.eventPageBreadCrumb = page.getByRole('main').getByRole('link', { name: 'Events' });
         this.eventNameTitle = page.getByRole('heading', { level: 1 });
         this.eventPrice = this.#rowValue(page, 'Price per ticket');
         this.eventCustomerFullNameField = page.getByRole('textbox', { name: 'Full Name*' });
@@ -25,6 +25,10 @@ export class EventPage {
 
     confirmationValue(label) {
         return this.#rowValue(this.eventConfirmationMessage, label);
+    }
+
+    async goto(eventId) {
+        await this.page.goto(`/events/${eventId}`);
     }
 
     async waitForLoaded() {
